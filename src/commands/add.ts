@@ -9,6 +9,7 @@ export default class Add extends Command {
 
   static examples = [
     `$ gitsync add parent_folder/repo_name
+creating repo repo_name in /path/to/homedir/projects/parent_folder
 `,
   ]
 
