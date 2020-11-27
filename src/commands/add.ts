@@ -23,7 +23,7 @@ creating repo repo_name in /path/to/homedir/projects/parent_folder
   async run() {
     const { args, flags } = this.parse(Add)
 
-    const logs: Log[] = []
+    let logs: Log[] = []
 
     let location = "/home/milan/projects/test/"
     let name = args.name

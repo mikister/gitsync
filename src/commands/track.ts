@@ -28,12 +28,12 @@ tracking owner/repo
   async run() {
     const { args, flags } = this.parse(Track)
 
-    const logs: Log[] = []
+    let logs: Log[] = []
 
     let location = "/home/milan/projects/test/"
-    const { owner, repo } = args.repo.split("/")
+    const [owner, repo] = args.repo.split("/")
     this.log(`tracking ${owner}/${repo}`)
-    console.log(args.repo);
+    console.log(args.repo)
 
     location = path.join(location, flags.directory || "")
 
