@@ -3,6 +3,7 @@ import * as path from "path"
 import { mkdir } from "../node_bindings/bash"
 import { repoClone } from "../node_bindings/gh"
 import { printLog } from "../utils/logging"
+import { Log } from "../model"
 
 export default class Track extends Command {
   static description = "describe the command here"
@@ -28,7 +29,7 @@ tracking owner/repo
   async run() {
     const { args, flags } = this.parse(Track)
 
-    let logs: Log[] = []
+    const logs: Log[] = []
 
     let location = "/home/milan/projects/test/"
     const [owner, repo] = args.repo.split("/")

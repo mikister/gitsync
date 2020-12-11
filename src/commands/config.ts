@@ -1,13 +1,24 @@
 import { Command, flags } from "@oclif/command"
-import { exists as configExists, generateConfig } from "../utils/config"
+import {
+  exists as configExists,
+  generateConfig,
+  getConfig,
+} from "../utils/config"
 import { printLog } from "../utils/logging"
+import { Config as ConfigModel, Log } from "../model"
 
 export default class Config extends Command {
   static description = "Edit gitsync configurations"
 
   static examples = [
-    `$ gitsync hello
-hello world from ./src/hello.ts!
+    `$ gitsync edit projectsHome=~/newProjectsHome
+> Set projectsHome to /home/<user>/newProjectsHome
+
+$ gitsync list
+> Listing all config options
+
+$ gitsync setup
+> Creating a default gitsync config
 `,
   ]
 
@@ -30,7 +41,8 @@ hello world from ./src/hello.ts!
       this.log("config does not exist")
       this.log('try running "gitsync config setup" to generate the config')
       return
-    } else if (configExists() && args.subcommand === "setup") {
+    }
+    if (configExists() && args.subcommand === "setup") {
       this.log("config already exists")
       return
     }
@@ -39,6 +51,13 @@ hello world from ./src/hello.ts!
       case "edit":
         break
       case "list":
+        this.log("Listing all config options:")
+        const config: ConfigModel = getConfig()
+
+        Object.entries(config).forEach((option) => {
+          const [name, value] = option
+          this.log(` - ${name}: ${value}`)
+        })
         break
       case "setup":
         await generateConfig()

@@ -1,3 +1,3 @@
-interface Config {
-  projectsHome: string
+export interface Config {
+  projectsHome: string;
 }
