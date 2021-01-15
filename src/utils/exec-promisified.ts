@@ -1,4 +1,5 @@
 const { exec } = require("child_process")
+import { Log } from "../model"
 
 export function execp(
   command: string,
