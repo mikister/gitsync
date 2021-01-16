@@ -1,3 +1,5 @@
+import { Log } from "../model"
+
 export function printLog(log: Log) {
   /* eslint-disable no-console */
   console.log(log.type)

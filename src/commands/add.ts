@@ -1,11 +1,12 @@
 import { Command, flags } from "@oclif/command"
+import { Log } from "../model"
 import { mkdir } from "../node_bindings/bash"
 import { repoCreate } from "../node_bindings/gh"
 import { gitInit, gitRemoteAdd } from "../node_bindings/git"
 import { printLog } from "../utils/logging"
 
 export default class Add extends Command {
-  static description = "Adds a new repo"
+  static description = "Adds a new repo, both local and remote"
 
   static examples = [
     `$ gitsync add parent_folder/repo_name

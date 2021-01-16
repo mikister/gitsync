@@ -18,9 +18,9 @@ repo 2
   static args = []
 
   async run() {
-    const { args, flags } = this.parse(List)
+    // const { args, flags } = this.parse(List)
 
-    let repos: string[] = await getRepoList()
+    const repos: string[] = await getRepoList()
 
     repos
       .sort((aa, bb) => (aa < bb ? -1 : 1))

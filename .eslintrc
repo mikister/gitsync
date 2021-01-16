@@ -1,10 +1,7 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript",
-    "prettier"
-  ],
+  "extends": ["oclif", "oclif-typescript", "prettier"],
   "rules": {
-    "prefer-promise-reject-errors": 0
+    "prefer-promise-reject-errors": 0,
+    "@typescript-eslint/member-delimiter-style": "none"
   }
 }

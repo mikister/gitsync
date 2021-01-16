@@ -5,7 +5,7 @@ import { getConfig } from "../utils/config"
 import { getRepoList, isRepoUpToDate } from "../utils/repo"
 
 export default class Check extends Command {
-  static description = "describe the command here"
+  static description = "Check if any local repos have uncommited changes"
 
   static examples = [
     `$ gitsync check
@@ -23,18 +23,18 @@ checking all repos
     const { args, flags } = this.parse(Check)
     const CONFIG: Config = getConfig()
 
-    let repos: { [key: string]: boolean } = {}
-    let logs: Log[] = []
+    const repos: { [key: string]: boolean } = {}
+    const logs: Log[] = []
 
     if (args.path) {
-      let path: string = join(CONFIG.projectsHome, args.path)
+      const path: string = join(CONFIG.projectsHome, args.path)
       repos[args.path] = await isRepoUpToDate(path)
     } else {
-      let repoNames: string[] = await getRepoList()
+      const repoNames: string[] = await getRepoList()
 
       for await (const name of repoNames) {
-        let path: string = join(CONFIG.projectsHome, name)
-        let isUpToDate = await isRepoUpToDate(path)
+        const path: string = join(CONFIG.projectsHome, name)
+        const isUpToDate = await isRepoUpToDate(path)
         repos[name] = isUpToDate
       }
     }
