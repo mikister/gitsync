@@ -46,9 +46,4 @@ export async function getRepoList(): Promise<string[]> {
   }
 
   return repos
-
-  //   let test = await isDir(join(CONFIG.projectsHome, contents[0]))
-  //   let test = await isGitRepo(join(CONFIG.projectsHome, contents[0]))
-  //   let test = await isGitRepo("/home/milan/projects/personal")
-  //   console.log(test)
 }

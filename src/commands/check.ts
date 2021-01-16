@@ -39,18 +39,14 @@ checking all repos
       }
     }
 
-    Object.entries(repos).forEach(([repo, isUpToDate]) => {
-      if (isUpToDate) {
-        this.log(`    ${repo}`)
-      } else {
-        this.log(`*   ${repo}`)
-      }
-    })
-
-    // const name = flags.name ?? "world"
-    // this.log(`hello ${name} from ./src/commands/hello.ts`)
-    // if (args.file && flags.force) {
-    //   this.log(`you input --force and --file: ${args.file}`)
-    // }
+    Object.entries(repos)
+      .sort((aa, bb) => (aa[0] < bb[0] ? -1 : 1))
+      .forEach(([repo, isUpToDate]) => {
+        if (isUpToDate) {
+          this.log(`    ${repo}`)
+        } else {
+          this.log(`*   ${repo}`)
+        }
+      })
   }
 }
