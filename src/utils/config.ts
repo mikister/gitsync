@@ -52,8 +52,8 @@ export function getDefaultConfigObject(): Config {
 
 export function getConfig(): Config {
   const configPath = join(getConfigPath(), "config.json")
-  const rawdata: unknown = fs.readFileSync(configPath)
-  return JSON.parse(rawdata as string) as Config
+  const rawdata: Buffer = fs.readFileSync(configPath)
+  return JSON.parse(rawdata.toString()) as Config
 }
 
 export function writeConfig(configData: Config): Promise<Log[]> {

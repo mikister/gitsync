@@ -33,7 +33,6 @@ tracking owner/repo in path/where/to/track
 
     const logs: Log[] = []
 
-    const location = "/home/milan/projects/test/"
     const [owner, repo] = args.repo.split("/")
     const repoPath = path.join(CONFIG.projectsHome, args.path)
     this.log(`tracking ${owner}/${repo} in ${repoPath}`)

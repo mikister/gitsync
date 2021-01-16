@@ -24,7 +24,6 @@ checking all repos
     const CONFIG: Config = getConfig()
 
     const repos: { [key: string]: boolean } = {}
-    const logs: Log[] = []
 
     if (args.path) {
       const path: string = join(CONFIG.projectsHome, args.path)
