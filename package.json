@@ -1,6 +1,6 @@
 {
   "name": "@mikister/gitsync",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Milan Radojevic @mikister",
   "bin": {
     "gitsync": "./bin/run"
