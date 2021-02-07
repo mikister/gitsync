@@ -1,5 +1,5 @@
 import { Log } from "../model"
-import { execp } from "./../utils/exec-promisified"
+import { execp } from "./../utils"
 
 export function repoCreate(
   owner: string,

@@ -2,9 +2,8 @@ import { Command, flags } from "@oclif/command"
 import * as path from "path"
 import { mkdir } from "../node_bindings/bash"
 import { repoClone } from "../node_bindings/gh"
-import { printLog } from "../utils/logging"
+import { printLog, getConfig } from "../utils"
 import { Config, Log } from "../model"
-import { getConfig } from "../utils/config"
 
 export default class Track extends Command {
   static description = "Track remote repos locally"

@@ -3,8 +3,8 @@ import {
   exists as configExists,
   generateConfig,
   getConfig,
-} from "../utils/config"
-import { printLog } from "../utils/logging"
+  printLog,
+} from "../utils"
 import { Config as ConfigModel, Log } from "../model"
 
 export default class Config extends Command {
@@ -34,6 +34,7 @@ $ gitsync setup
 
   async run() {
     const { args, flags } = this.parse(Config)
+    let CONFIG: ConfigModel = {} as ConfigModel
 
     let logs: Log[] = []
 
@@ -51,10 +52,9 @@ $ gitsync setup
       case "edit":
         break
       case "list":
+        CONFIG = getConfig()
         this.log("Listing all config options:")
-        const config: ConfigModel = getConfig()
-
-        Object.entries(config).forEach((option) => {
+        Object.entries(CONFIG).forEach((option) => {
           const [name, value] = option
           this.log(` - ${name}: ${value}`)
         })

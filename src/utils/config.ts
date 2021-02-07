@@ -4,6 +4,16 @@ import { join } from "path"
 import { mkdir } from "../node_bindings/bash"
 import { Config, Log } from "../model"
 
+export function getDefaultConfigObject(): Config {
+  return {
+    projectsHome: join(homedir(), "projects"),
+  } as Config
+}
+
+export function getConfigPath(): string {
+  return join(homedir(), ".config", "gitsync")
+}
+
 export function exists(): boolean {
   let configExists = true
   const configPath = getConfigPath()
@@ -12,10 +22,6 @@ export function exists(): boolean {
   configExists = configExists && fs.existsSync(join(configPath, "config.json"))
 
   return configExists
-}
-
-export function getConfigPath(): string {
-  return join(homedir(), ".config", "gitsync")
 }
 
 export function generateConfig(): Promise<Log[]> {
@@ -42,12 +48,6 @@ export function generateConfig(): Promise<Log[]> {
 
     resolve(logs)
   })
-}
-
-export function getDefaultConfigObject(): Config {
-  return {
-    projectsHome: join(homedir(), "projects"),
-  } as Config
 }
 
 export function getConfig(): Config {

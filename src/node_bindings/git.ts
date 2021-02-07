@@ -1,4 +1,4 @@
-import { execp } from "./../utils/exec-promisified"
+import { execp } from "./../utils"
 import { Log } from "../model"
 
 export function gitInit(options: any = null): Promise<Log> {

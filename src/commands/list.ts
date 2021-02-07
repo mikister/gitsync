@@ -1,5 +1,5 @@
 import { Command, flags } from "@oclif/command"
-import { getRepoList } from "../utils/repo"
+import { getRepoList } from "../utils"
 
 export default class List extends Command {
   static description = "describe the command here"

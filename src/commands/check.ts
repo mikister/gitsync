@@ -1,8 +1,12 @@
 import { Command, flags } from "@oclif/command"
 import { join } from "path"
-import { Config, Log } from "../model"
-import { getConfig } from "../utils/config"
-import { getNonRepoList, getRepoList, isRepoUpToDate } from "../utils/repo"
+import { Config } from "../model"
+import {
+  getConfig,
+  getNonRepoList,
+  getRepoList,
+  isRepoUpToDate,
+} from "../utils"
 
 export default class Check extends Command {
   static description = "Check if any local repos have uncommited changes"
