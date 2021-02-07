@@ -1,9 +1,9 @@
 import * as fs from "fs"
 import { join } from "path"
-import { Config } from "../model"
+import { Config, Node } from "../model"
 import { gitDiffIndex, gitUpdateIndex } from "../node_bindings/git"
-import { isDir } from "./bash"
 import { getConfig } from "./config"
+import { getDirList } from "./dir"
 import { isGitRepo } from "./git"
 
 export async function isRepoUpToDate(path: fs.PathLike): Promise<boolean> {
@@ -21,7 +21,7 @@ export async function getRepoList(): Promise<string[]> {
   const CONFIG: Config = getConfig()
 
   const repos = []
-  const toRead = await fs.promises.readdir(CONFIG.projectsHome)
+  const toRead = await getDirList(CONFIG.projectsHome)
 
   while (toRead.length !== 0) {
     const currPath = toRead[0]
@@ -29,21 +29,122 @@ export async function getRepoList(): Promise<string[]> {
 
     toRead.splice(0, 1)
 
-    if (await isDir(currPathAbs)) {
-      if (await isGitRepo(currPathAbs)) {
-        repos.push(currPath)
-      } else {
-        const extraToRead = await fs.promises.readdir(currPathAbs)
-        if (extraToRead) {
-          extraToRead.forEach((extraPath) => {
-            toRead.push(join(currPath, extraPath))
-          })
-        }
-      }
+    if (await isGitRepo(currPathAbs)) {
+      repos.push(currPath)
     } else {
-      continue
+      const extraToRead = await getDirList(currPathAbs)
+      if (extraToRead) {
+        extraToRead.forEach((extraPath) => {
+          toRead.push(join(currPath, extraPath))
+        })
+      }
     }
   }
 
   return repos
+}
+
+export async function getNonRepoList(): Promise<string[]> {
+  type DirNode = Node<{
+    path: string
+    hasGitContent: boolean
+    isMapped: boolean
+    isRead: boolean
+  }>
+
+  const CONFIG: Config = getConfig()
+
+  const nonrepos: string[] = []
+  const tree: DirNode = {
+    parent: null,
+    children: [],
+    content: {
+      path: CONFIG.projectsHome,
+      hasGitContent: false,
+      isMapped: false,
+      isRead: false,
+    },
+  }
+
+  let currNode: DirNode = tree
+
+  while (!currNode.content.isMapped) {
+    if (currNode.children.length === 0) {
+      const toAdd = await getDirList(currNode.content.path)
+
+      while (toAdd.length !== 0) {
+        const currPath: string = toAdd[0]
+        const currPathAbs: string = join(currNode.content.path, currPath)
+        const isGit = await isGitRepo(currPathAbs)
+        toAdd.splice(0, 1)
+
+        currNode.children.push({
+          parent: currNode,
+          children: [],
+          content: {
+            path: currPathAbs,
+            hasGitContent: isGit,
+            isMapped: isGit,
+            isRead: false,
+          },
+        })
+
+        if (isGit) {
+          let currParent = currNode
+          while (currParent) {
+            if (currParent.content.hasGitContent) break
+
+            currParent.content.hasGitContent = true
+
+            if (currParent.parent) currParent = currParent.parent
+            else break
+          }
+        }
+      }
+    }
+
+    const nextNode = currNode.children.find(
+      (node: DirNode) => !node.content.isMapped
+    )
+
+    if (nextNode) {
+      currNode = nextNode
+      continue
+    }
+
+    currNode.content.isMapped = true
+    if (currNode.parent) currNode = currNode.parent
+  }
+
+  currNode = tree
+  while (!currNode.content.isRead) {
+    currNode.content.isRead = true
+    if (currNode.content.hasGitContent) {
+      const nextNode = currNode.children.find(
+        (node: DirNode) => !node.content.isRead
+      )
+
+      if (nextNode) {
+        currNode = nextNode
+        continue
+      }
+    } else {
+      nonrepos.push(currNode.content.path)
+    }
+
+    while (currNode.parent) {
+      currNode = currNode.parent
+
+      const nextNode = currNode.children.find(
+        (node: DirNode) => !node.content.isRead
+      )
+
+      if (nextNode) {
+        currNode = nextNode
+        break
+      }
+    }
+  }
+
+  return nonrepos
 }
