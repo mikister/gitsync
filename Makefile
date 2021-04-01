@@ -1,7 +1,7 @@
 # Which target to run by default (when no target is passed to make)
 .DEFAULT_GOAL := help
 
-.PHONY: format lint lint.fix
+.PHONY: format lint
 
 help: ## Show help
 	@echo "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:"
@@ -13,5 +13,5 @@ format: ## Format code with prettier
 lint: ## Lint code with eslint
 	npm run-script lint
 
-lint.fix: ## Lint and fix code with eslint
-	npm run-script lint:fix
+lint: ## Publish package to npm
+	npm publish

@@ -56,8 +56,7 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
     "format": "prettier --write \"**/*.+(ts|js|jsx|json|css|md)\"",
-    "lint": "eslint --ext .ts .",
-    "lint:fix": "eslint --fix --ext .ts .",
+    "lint": "eslint --fix --ext .ts .",
     "test": "jest",
     "coverage": "jest --coverage"
   },
