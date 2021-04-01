@@ -19,7 +19,7 @@ $ npm install -g @mikister/gitsync
 $ gitsync COMMAND
 running command...
 $ gitsync (-v|--version|version)
-@mikister/gitsync/0.0.2 linux-x64 node-v14.4.0
+@mikister/gitsync/0.0.3 linux-x64 node-v15.11.0
 $ gitsync --help [COMMAND]
 USAGE
   $ gitsync COMMAND
@@ -51,7 +51,7 @@ EXAMPLE
   creating repo repo_name in /path/to/homedir/projects/parent_folder
 ```
 
-_See code: [src/commands/add.ts](https://github.com/mikister/gitsync/blob/v0.0.2/src/commands/add.ts)_
+_See code: [src/commands/add.ts](https://github.com/mikister/gitsync/blob/v0.0.3/src/commands/add.ts)_
 
 ## `gitsync check [PATH]`
 
@@ -60,14 +60,18 @@ USAGE
   $ gitsync check [PATH]
 
 OPTIONS
-  -h, --help  show CLI help
+  -g, --noGit  Check for all directories that aren't a git repo
+  -h, --help   show CLI help
 
 EXAMPLE
   $ gitsync check
   checking all repos
+
+  $ gitsync check specific/repo
+  checking specific/repo
 ```
 
-_See code: [src/commands/check.ts](https://github.com/mikister/gitsync/blob/v0.0.2/src/commands/check.ts)_
+_See code: [src/commands/check.ts](https://github.com/mikister/gitsync/blob/v0.0.3/src/commands/check.ts)_
 
 ## `gitsync config SUBCOMMAND [VALUE]`
 
@@ -90,7 +94,7 @@ EXAMPLE
   > Creating a default gitsync config
 ```
 
-_See code: [src/commands/config.ts](https://github.com/mikister/gitsync/blob/v0.0.2/src/commands/config.ts)_
+_See code: [src/commands/config.ts](https://github.com/mikister/gitsync/blob/v0.0.3/src/commands/config.ts)_
 
 ## `gitsync hello [FILE]`
 
@@ -108,7 +112,7 @@ EXAMPLE
   hello world from ./src/hello.ts!
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/mikister/gitsync/blob/v0.0.2/src/commands/hello.ts)_
+_See code: [src/commands/hello.ts](https://github.com/mikister/gitsync/blob/v0.0.3/src/commands/hello.ts)_
 
 ## `gitsync help [COMMAND]`
 
@@ -140,7 +144,7 @@ EXAMPLE
   repo 2
 ```
 
-_See code: [src/commands/list.ts](https://github.com/mikister/gitsync/blob/v0.0.2/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/mikister/gitsync/blob/v0.0.3/src/commands/list.ts)_
 
 ## `gitsync track [REPO] [PATH]`
 
@@ -157,5 +161,5 @@ EXAMPLE
   tracking owner/repo in path/where/to/track
 ```
 
-_See code: [src/commands/track.ts](https://github.com/mikister/gitsync/blob/v0.0.2/src/commands/track.ts)_
+_See code: [src/commands/track.ts](https://github.com/mikister/gitsync/blob/v0.0.3/src/commands/track.ts)_
 <!-- commandsstop -->

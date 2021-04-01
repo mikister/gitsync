@@ -1,5 +1,5 @@
 import { Command, flags } from "@oclif/command"
-import { join } from "path"
+import { join, basename } from "path"
 import { Config } from "../model"
 import {
   getConfig,
@@ -53,22 +53,22 @@ checking specific/repo
       const path: string = join(CONFIG.projectsHome, args.path)
       repos[args.path] = await isRepoUpToDate(path)
     } else {
-      const repoNames: string[] = await getRepoList()
+      const repoNames: string[] = (await getRepoList()) as string[]
 
-      for await (const name of repoNames) {
-        const path: string = join(CONFIG.projectsHome, name)
+      for await (const path of repoNames) {
         const isUpToDate = await isRepoUpToDate(path)
-        repos[name] = isUpToDate
+        repos[path] = isUpToDate
       }
     }
 
+    const maxBasenameLen: number = Math.max(...Object.keys(repos).map((repo: string)=>basename(repo).length))
     Object.entries(repos)
       .sort((aa, bb) => (aa[0] < bb[0] ? -1 : 1))
       .forEach(([repo, isUpToDate]) => {
         if (isUpToDate) {
-          this.log(`    ${repo}`)
+          this.log(`    ${`${basename(repo)}`.padEnd(maxBasenameLen, " ")}    ${repo}`)
         } else {
-          this.log(`*   ${repo}`)
+          this.log(`*   ${`${basename(repo)}`.padEnd(maxBasenameLen, " ")}    ${repo}`)
         }
       })
   }

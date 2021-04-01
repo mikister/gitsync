@@ -13,5 +13,5 @@ format: ## Format code with prettier
 lint: ## Lint code with eslint
 	npm run-script lint
 
-lint: ## Publish package to npm
+publish: ## Publish package to npm
 	npm publish

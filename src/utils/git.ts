@@ -5,10 +5,13 @@ import { Config, Node } from "../model"
 import { gitDiffIndex, gitUpdateIndex } from "../node_bindings/git"
 import { getConfig } from "./config"
 import { getDirList } from "../utils"
+import { checkAccess, isDir, traverse } from "./filesystem"
+import { filterAsync } from "./array"
 
 export async function isGitRepo(path: fs.PathLike): Promise<boolean> {
   try {
-    await execp("[ -d .git ] || git rev-parse --git-dir 2>&1", { cwd: path })
+    await execp("[ -d .git ] 2>&1", { cwd: path })
+    // await execp("[ -d .git ] || git rev-parse --git-dir 2>&1", { cwd: path })
     return true
   } catch (error) {
     return false
@@ -26,31 +29,27 @@ export async function isRepoUpToDate(path: fs.PathLike): Promise<boolean> {
   return true
 }
 
-export async function getRepoList(path = ""): Promise<string[]> {
+export async function getRepoList(path = ""): Promise<fs.PathLike[]> {
   const CONFIG: Config = getConfig()
+  const potentialRepos: fs.PathLike[] = []
 
-  const repos: string[] = []
-  const toRead = await getDirList(join(CONFIG.projectsHome, path))
+  return new Promise((resolve) => {
+    traverse(join(CONFIG.projectsHome, path), async (absPath: fs.PathLike) => {
+      if (await isDir(absPath))
+        if (await checkAccess(absPath, fs.constants.R_OK))
+          return true
 
-  const getPromises = toRead.map(
-    (subdir: string) =>
-      new Promise<void>(async (resolve) => {
-        const currPath: string = join(path, subdir)
-        const currPathAbs: string = join(CONFIG.projectsHome, currPath)
-
-        if (await isGitRepo(currPathAbs)) {
-          repos.push(currPath)
-        } else {
-          const extraRepos: string[] = await getRepoList(currPath)
-          repos.push(...extraRepos)
-        }
-
-        resolve()
-      })
-  )
-
-  await Promise.all(getPromises)
-  return repos
+      return false
+    },
+    async (absPath: fs.PathLike) => isGitRepo(absPath),
+    ).subscribe({
+      next: (dirpath) => {potentialRepos.push(dirpath)},
+      error: (err) => {console.error("getRepoList: " + err)},
+      complete: async () => {
+        resolve(await filterAsync(potentialRepos, isGitRepo))
+      },
+    })
+  })
 }
 
 export async function getNonRepoList(): Promise<string[]> {
